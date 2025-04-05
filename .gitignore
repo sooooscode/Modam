@@ -1,0 +1,15 @@
+node_modules/
+backend/build/
+
+.env
+
+out/
+/.idea/
+
+backend.tar.gz
+
+.vscode/
+__pycache__/
+*.html
+
+#chroma_store/ 
