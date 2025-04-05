@@ -15,19 +15,43 @@ export function Chat() {
   const accessToken = localStorage.getItem("accessToken") || "";
 
   useEffect(() => {
-    const socket = new SockJS("http://3.147.254.253:3000");
+    console.log("✅ WebSocket 연결 시도...");
+
+    const socket = new SockJS("https://3.147.254.253:8080/ws/chat/{clubId}");
     const client = new Client({
       webSocketFactory: () => socket,
       reconnectDelay: 5000, // 자동 재연결 (5초)
+
       onConnect: () => {
-        console.log("WebSocket 연결 성공");
+        console.log("✅ WebSocket 연결 성공");
+        console.log("✅ STOMP 연결 상태:", client.connected);
+
         client.subscribe("/topic/message", (message) => {
+          console.log("📩 메시지 수신:", message.body);
           const receivedMessage = JSON.parse(message.body);
           setMessages((prevMessages) => [...prevMessages, receivedMessage]);
         });
+
+        setStompClient(client);
       },
-      onStompError: (error) => {
-        console.error("STOMP 오류:", error);
+
+      onStompError: (frame) => {
+        console.error("❌ STOMP 오류 발생:", frame);
+        if (frame.headers) {
+          console.error("❌ 오류 헤더:", frame.headers);
+        }
+        console.error("❌ 오류 메시지:", frame.body);
+      },
+
+      onWebSocketClose: (event) => {
+        console.warn("⚠️ WebSocket 연결 종료", event);
+        if (event.reason) {
+          console.warn("⚠️ 종료 사유:", event.reason);
+        }
+      },
+
+      onWebSocketError: (error) => {
+        console.error("❌ WebSocket 오류 발생:", error);
       },
     });
 
@@ -35,7 +59,8 @@ export function Chat() {
     setStompClient(client);
 
     return () => {
-      client.deactivate(); // 컴포넌트 언마운트 시 연결 해제
+      console.log("🔌 WebSocket 연결 해제...");
+      client.deactivate();
     };
   }, []);
 
