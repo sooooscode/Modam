@@ -12,4 +12,4 @@ backend.tar.gz
 __pycache__/
 *.html
 
-#chroma_store/ 
+/0001-edit-WebSocketConfig.patch
