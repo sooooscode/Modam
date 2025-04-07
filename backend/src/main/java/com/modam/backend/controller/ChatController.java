@@ -2,30 +2,32 @@ package com.modam.backend.controller;
 
 import com.modam.backend.dto.ChatMessageDto;
 import com.modam.backend.service.ChatService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/chat")
+@RequiredArgsConstructor
 public class ChatController {
 
-    private final ChatService chat_service;
+    private final ChatService chatService;
+    private final SimpMessagingTemplate messagingTemplate;
 
-    public ChatController(ChatService chat_service) {
-        this.chat_service = chat_service;
+    // WebSocket으로 메시지 수신 → 저장 및 전송
+    @MessageMapping("/chat/{clubId}")
+    public void sendMessage(@DestinationVariable int clubId, ChatMessageDto message) {
+        ChatMessageDto saved = chatService.saveChatMessage(clubId, message);
+        messagingTemplate.convertAndSend("/topic/chat/" + clubId, saved);
     }
 
-    @MessageMapping("/chat/{club_id}")
-    @SendTo("/topic/chat/{club_id}")
-    public ChatMessageDto sendMessage(@PathVariable("club_id") int club_id, ChatMessageDto message) {
-        return chat_service.saveChatMessage(club_id, message);
-    }
-
-    @GetMapping("/history/{club_id}")
-    public List<ChatMessageDto> getChatHistory(@PathVariable("club_id") int club_id) {
-        return chat_service.getChatHistory(club_id);
+    // 기존 채팅 내역 조회 (REST API)
+    @GetMapping("/history/{clubId}")
+    public List<ChatMessageDto> getChatHistory(@PathVariable int clubId) {
+        return chatService.getChatHistory(clubId);
     }
 }
