@@ -1,7 +1,6 @@
 package com.modam.backend.controller;
 
 import com.modam.backend.dto.MemoDto;
-import com.modam.backend.model.Memo;
 import com.modam.backend.service.MemoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

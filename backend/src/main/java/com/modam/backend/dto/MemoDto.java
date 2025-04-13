@@ -1,11 +1,7 @@
 package com.modam.backend.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -16,13 +12,13 @@ import java.time.LocalDateTime;
 public class MemoDto {
 
     @Schema(description = "메모 고유 ID", example = "901")
-    private Integer memo_id; // 변경: Long → Integer (DB에 맞춤)
+    private Integer memoId;
 
     @Schema(description = "북클럽 ID", example = "9")
-    private Integer club_id;
+    private Integer clubId;
 
-    @Schema(description = "작성자 유저 ID", example = "3") // 예시도 숫자로 변경
-    private Integer user_id; // 변경: String → Integer (DB 외래키 타입 일치)
+    @Schema(description = "작성자 유저 ID", example = "3")
+    private Integer userId;
 
     @Schema(description = "메모 내용", example = "모임 중 핵심 토픽 정리 메모입니다.")
     private String content;

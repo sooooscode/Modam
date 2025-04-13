@@ -15,19 +15,18 @@ public class Memo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer memo_id;
+    private Integer memoId;
 
-    @Column(nullable = false)
-    private Integer user_id;
+    @Column(name = "user_id", nullable = false)
+    private Integer userId;
 
-    @Column(nullable = false)
-    private Integer club_id;
+    @Column(name = "club_id", nullable = false)
+    private Integer clubId;
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
     private LocalDateTime created_time;
-
     private LocalDateTime updated_time;
 
     private Boolean isFinalized = false;
