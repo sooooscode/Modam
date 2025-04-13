@@ -79,6 +79,10 @@ def generate_topics_api():
     book_id = data.get("book_id")
     user_responses = data.get("user_responses")
 
+
+    # ✅ soo: chroma_root 파라미터를 받아서 기본 경로 덮어쓰기 가능하게 함
+    chroma_root = data.get("chroma_root", "ai-server/core/local_chroma_store")
+
     if not all([book_id, user_responses]):
         return jsonify({"error": "Missing required fields"}), 400
 

@@ -1,7 +1,7 @@
 node_modules/
 
 
-#backend
+#backend start:
 backend/build/
 .env
 out/
@@ -10,7 +10,8 @@ backend.tar.gz
 0001-edit-WebSocketConfig.patch
 
 /ai-server/core/local_chroma_store/
-
+/ai-server/core/local_chroma_book.py
+#backend end
 
 .vscode/
 __pycache__/
@@ -28,6 +29,7 @@ backend/.gradle/
 #ai-server/core/chroma_store/**/*.bin
 #ai-server/core/chroma_store/**/*.pickle
 #!ai-server/core/chroma_store/**/chroma.sqlite3
+
 
 
 
