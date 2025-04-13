@@ -25,3 +25,4 @@ __pycache__/
 backend/.gradle/
 ai-server/core/chroma_store/**/*.bin
 
+ai-server/core/chroma_store/2/655e1089-619e-4832-9614-a1cce4364358/
