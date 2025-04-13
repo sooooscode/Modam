@@ -28,3 +28,4 @@ ai-server/core/chroma_store/**/*.pickle
 !ai-server/core/chroma_store/**/chroma.sqlite3
 
 ai-server/core/chroma_store/2/655e1089-619e-4832-9614-a1cce4364358/
+/ai-server/core/chroma_store/1/118c2558-ea8e-4967-a965-47536133bf4d/
