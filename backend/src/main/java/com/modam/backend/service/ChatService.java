@@ -74,13 +74,21 @@ public class ChatService {
             boolean alreadyGenerated = discussionTopicRepository.existsByClub(bookClub);
 
             if (enterCount == 4 && !alreadyGenerated) {
-                int bookId = bookClub.getBook().getBookId();
-                List<String> userResponses = chatMessageRepository.findByBookClubOrderByCreatedTimeAsc(bookClub)
-                        .stream()
-                        .filter(m -> m.getMessageType() == MessageType.SUBTOPIC)
-                        .map(ChatMessage::getContent)
-                        .collect(Collectors.toList());
-                sendAiMainTopic(clubId, bookId, userResponses);
+                synchronized (this) { // 추가: 블록 단위 동기화로 다중 요청 충돌 방지
+                    // 한 번 더 체크 (동시성 대비 이중 확인)
+                    if (!discussionTopicRepository.existsByClub(bookClub)) {
+                        int bookId = bookClub.getBook().getBookId();
+
+                        List<String> userResponses = chatMessageRepository
+                                .findByBookClubOrderByCreatedTimeAsc(bookClub)
+                                .stream()
+                                .filter(m -> m.getMessageType() == MessageType.SUBTOPIC)
+                                .map(ChatMessage::getContent)
+                                .collect(Collectors.toList());
+
+                        sendAiMainTopic(clubId, bookId, userResponses);
+                    }
+                }
             }
         }
 
